@@ -1,0 +1,18 @@
+{
+  "name": "twit",
+  "version": "1.0.0",
+  "description": "twitter api stuff",
+  "main": "liri.js",
+  "scripts": {
+    "test": "node liri.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "liri-node-app"
+  },
+  "keywords": [
+    "twitter"
+  ],
+  "author": "Derek Brown",
+  "license": "ISC"
+}
