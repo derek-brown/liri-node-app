@@ -25,23 +25,25 @@ else if(userInput === "spotify-this-song"){
 	var songChoice = [];
 	var song;
 
-	if(userInput){
-		for(var i=3; i<process.argv.length; i++){
-			songChoice.push(process.argv[i]);
-		}
-
-		song = JSON.stringify(songChoice);
-
-		console.log(song);
-		spotify.search({type: "track", query: song}, function(err, data){
-			if(err){
-				console.log('Error: occured: ' + err);
-				return;
-			}
-			
-			console.log(data.artists);
-		})
+	for(var i=3; i<process.argv.length; i++){
+		songChoice.push(process.argv[i]);
 	}
+
+	if(!process.argv[3]){
+		song = JSON.stringify("The Sign");
+	}else{
+		song = JSON.stringify(songChoice);
+	}
+
+	console.log(song);
+	spotify.search({type: "track", query: song}, function(err, data){
+		if(err){
+			console.log('Error: occured: ' + err);
+			return;
+		}
+		
+		console.log(data.tracks.items[0].artists[0].name);
+	})
 	//Artist
 	//the song's name
 	//A preview lin of the song from spotify
@@ -56,11 +58,12 @@ else if(userInput === "movie-this"){
 	for(var i=3; i<process.argv.length; i++){
 		movieChoice.push(process.argv[i]);
 	}
-		if(!process.argv[3]){
-			movie = JSON.stringify("Mr. Nobody");
-		}else{
-			movie = JSON.stringify(movieChoice);
-		}
+
+	if(!process.argv[3]){
+		movie = JSON.stringify("Mr. Nobody");
+	}else{
+		movie = JSON.stringify(movieChoice);
+	}
 
 	var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=40e9cece";
 
