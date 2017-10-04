@@ -1,42 +1,43 @@
-//var keys = require("twitterKeys");
-
 var userInput = process.argv[2];
-var twit = require("twitter");
-var twitKeys = require("./keys.js");
-var Twitter = new twit(twitKeys);
-
-var spotify = require("spotify");
+var Twitter = require("twitter");
+var APIKeys = require("./keys.js");
+var Spotify = require("node-spotify-api");
 
 if(userInput === "my-tweets"){
 	
-	var params = {screen_name: 'sample_derek'};
-		Twitter.get('statuses/user_timeline', params, function(error, tweets, response) {
-  		if (!error) {
-    		console.log(tweets);
-  		}
-  		console.log(tweets);
-	});
-		console.log(twitKeys);
-	console.log("tweets!");
+	var tKeys = new Twitter(APIKeys.twitterKeys);
+
+	var params = {screen_name: 'sample_derek', count: 20};
+		tKeys.get('statuses/user_timeline', params, function(error, tweets, response) {
+  			if (!error) {
+  				for(var i=0; i<tweets.length; i++){
+  					console.log(tweets[i].text);
+  				}
+  			}
+ 		});
 }
 else if(userInput === "spotify-this-song"){
+
+	var spotify = new Spotify(APIKeys.spotifyKeys);
+
 	var songChoice = [];
 	var song;
+
 	if(userInput){
-		for(var i=2; i<userInput; i++){
-			songChoice.push(userInput[i]);
+		for(var i=3; i<process.argv.length; i++){
+			songChoice.push(process.argv[i]);
 		}
+
 		song = JSON.stringify(songChoice);
 
-		spotify.search({type: "track", query: song},
-			function(err, data){
-				if(err){
-					console.log('Error: occured: ' + err);
-					console.log(song);
-					return;
-				}else{
-					console.log(data);
-				}
+		console.log(song);
+		spotify.search({type: "track", query: song}, function(err, data){
+			if(err){
+				console.log('Error: occured: ' + err);
+				return;
+			}
+			
+			console.log(data);
 		})
 	}
 	//Artist
