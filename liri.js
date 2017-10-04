@@ -2,13 +2,15 @@ var userInput = process.argv[2];
 var Twitter = require("twitter");
 var APIKeys = require("./keys.js");
 var Spotify = require("node-spotify-api");
+var request = require("request");
+var fs = require("fs");
 
 if(userInput === "my-tweets"){
 	
-	var tKeys = new Twitter(APIKeys.twitterKeys);
+	var twitter = new Twitter(APIKeys.twitterKeys);
 
 	var params = {screen_name: 'sample_derek', count: 20};
-		tKeys.get('statuses/user_timeline', params, function(error, tweets, response) {
+		twitter.get('statuses/user_timeline', params, function(error, tweets, response) {
   			if (!error) {
   				for(var i=0; i<tweets.length; i++){
   					console.log(tweets[i].text);
@@ -37,7 +39,7 @@ else if(userInput === "spotify-this-song"){
 				return;
 			}
 			
-			console.log(data);
+			console.log(data.artists);
 		})
 	}
 	//Artist
@@ -48,19 +50,42 @@ else if(userInput === "spotify-this-song"){
 	//will utilize the spotify node package
 }
 else if(userInput === "movie-this"){
-	console.log("movies!");
-	//title of movie
-	//year the movie came out
-	//IMDB rating of the movie
-	//Rotten tomatoes rating
-	//country where the movie was produced
-	//Plot of the movie
-	//Actors in the movie
-	//default movie will be Mr. Nobody
-	//use OMDB, api key is "40e9cece"
+	var movieChoice = [];
+	var movie = "";
+
+	for(var i=3; i<process.argv.length; i++){
+		movieChoice.push(process.argv[i]);
+	}
+		if(!process.argv[3]){
+			movie = JSON.stringify("Mr. Nobody");
+		}else{
+			movie = JSON.stringify(movieChoice);
+		}
+
+	var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=40e9cece";
+
+	request(queryUrl, function(error, response, body){
+		if(!error){
+			console.log("----------------------\n"+
+			"Title: " + JSON.parse(body).Title + "\n"+
+			"Release Year: " + JSON.parse(body).Year + "\n"+
+			"IMDB Rating: " + JSON.parse(body).imdbRating + "\n"+
+			"Rotten Tomatoes: " + JSON.parse(body).Ratings[1].Value + "\n"+
+			"Plot of the Movie: " + JSON.parse(body).Plot + "\n"+
+			"Country where the movie was produced: " + JSON.parse(body).Country + "\n"+
+			"Actors in the movie: " + JSON.parse(body).Actors + "\n"+
+			"----------------------");
+		}
+	});
 }
 else if(userInput === "do-what-it-says"){
-	console.log("random!");
+
+	fs.readFile("random.txt", "utf8", function(error, data){
+		if (error){
+			return console.log(error);
+		}
+		console.log(data);
+	})
 	//using fs node package take the text from inside random.txt
 }
 else if(!userInput){

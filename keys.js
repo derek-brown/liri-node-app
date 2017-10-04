@@ -1,7 +1,4 @@
 ///Javascript
-
-console.log("this is loaded");
-
 var twitterKeys = {
   consumer_key: 'ZzHpuNZzlpXStVeFB7S9GAJ10',
   consumer_secret: '57Cf6quxh7dz4R061eeDAip12oDUxpRyruIX9Hm9C7Rt7HiJ1u',
