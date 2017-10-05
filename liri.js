@@ -42,7 +42,13 @@ else if(userInput === "spotify-this-song"){
 			return;
 		}
 		
-		console.log(data.tracks.items[0].artists[0].name);
+		console.log("-----------------------------\n"+
+			"Artist: " + data.tracks.items[0].artists[0].name + "\n"+
+			"Song Name: " + song + "\n"+
+			"Album: " + data.tracks.items[0].album.name + "\n"+
+			"------------------------------\n");
+
+		console.log();
 	})
 	//Artist
 	//the song's name
